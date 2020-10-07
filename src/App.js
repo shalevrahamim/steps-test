@@ -1,21 +1,17 @@
 import React, { useState } from 'react';
-import axios from 'axios';
 import './App.css';
 import Comment from './components/comment/comment';
+import { getComments, sendComment } from './utils/commenter';
 
-const LIMIT = 20;
+const EMAIL = 'shalevr1997@gmail.com';
+const COMMENT_NAME = 'new comment';
 let page = 1;
-
-const getComments = async (page, limit) => {
-  const response = await axios.get(`https://jsonplaceholder.typicode.com/comments?_page=${page}&_limit=${limit}`)
-  return response.data;
-};
 
 const App = () => {
   const [commentState, setCommentState] = useState([]);
 
   const loadComments = async () => {
-    const newComments = await getComments(page++, LIMIT);
+    const newComments = await getComments(page++);
     if (!newComments.length)
       document.getElementById('btnLoadComment').hidden = true;
     commentState.push(...newComments);
@@ -27,16 +23,11 @@ const App = () => {
     const inputValue = document.getElementById('inputComment').value;
     if (!inputValue)
       return;
-    try {
-      await axios.post('test.steps.me/test/testAssignComment', { body: inputValue });
-    }
-    catch (error) {
-      console.log('error', error.message);
-    }
-    commentState.push({ body: inputValue });
+    const comment = await sendComment({ email: EMAIL, name: COMMENT_NAME, body: inputValue });
+    commentState.push(comment);
     setCommentState([...commentState]);
   }
-  console.log(commentState);
+
   return (
     <div className="App">
       <h1>Commenter</h1>
