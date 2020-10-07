@@ -1,25 +1,29 @@
 import React, { useState } from 'react';
 import './App.css';
 import Comment from './components/comment/comment';
+import InfiniteScroll from 'react-infinite-scroll-component';
 import { getComments, sendComment } from './utils/commenter';
 
 const EMAIL = 'shalevr1997@gmail.com';
 const COMMENT_NAME = 'new comment';
 let page = 1;
+let hasMoreComments = true;
 
 const App = () => {
   const [commentState, setCommentState] = useState([]);
 
   const loadComments = async () => {
-    const newComments = await getComments(page++);
-    if (!newComments.length)
-      document.getElementById('btnLoadComment').hidden = true;
+    const newComments = await getComments(page);
+    if(!newComments.length)
+      hasMoreComments = false;
+    else
+      page++;
     commentState.push(...newComments);
-    console.log('commentState', commentState)
     setCommentState([...commentState]);
   }
-
+  
   const insertComment = async () => {
+    loadComments();
     const inputValue = document.getElementById('inputComment').value;
     if (!inputValue)
       return;
@@ -34,10 +38,16 @@ const App = () => {
       <input id='inputComment' placeholder='Add a comment...' className='Input' />
       <button onClick={insertComment}>insert comment</button>
       <br />
-      {commentState.map(item =>
-        <Comment key={item.id} comment={item} />
-      )}
-      <button id='btnLoadComment' onClick={loadComments}>load more comments</button>
+      <InfiniteScroll
+        dataLength={commentState.length}
+        next={loadComments}
+        hasMore={hasMoreComments}
+        loader={<h4>Loading comments data...</h4>}
+      >
+        {commentState.map(item =>
+          <Comment key={item.id} comment={item} />
+        )}
+      </InfiniteScroll>
     </div>
   );
 }
