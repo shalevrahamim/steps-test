@@ -1,8 +1,9 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './App.css';
 import Comment from './components/comment/comment';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import { getComments, sendComment } from './utils/commenter';
+import userEvent from '@testing-library/user-event';
 
 const EMAIL = 'shalevr1997@gmail.com';
 const COMMENT_NAME = 'new comment';
@@ -11,6 +12,10 @@ let hasMoreComments = true;
 
 const App = () => {
   const [commentState, setCommentState] = useState([]);
+  
+  useEffect(()=>{
+    loadComments();
+  }, []);
 
   const loadComments = async () => {
     const newComments = await getComments(page);
