@@ -1,46 +1,52 @@
 import React, { useState } from 'react';
-import logo from './logo.svg';
+import axios from 'axios';
 import './App.css';
 import Comment from './components/comment/comment';
 
 const LIMIT = 20;
 let page = 1;
-const comments = [];
 
 const getComments = async (page, limit) => {
-  const response = await fetch(`https://jsonplaceholder.typicode.com/comments?_page=${page}&_limit=${limit}`)
-  const comments = response.json()
-  return comments;
+  const response = await axios.get(`https://jsonplaceholder.typicode.com/comments?_page=${page}&_limit=${limit}`)
+  return response.data;
 };
 
 const App = () => {
-  const [commentState, setCommentState] = useState({
-    comments: comments,
-    lala: "shalev"
-  });
+  const [commentState, setCommentState] = useState([]);
 
   const loadComments = async () => {
     const newComments = await getComments(page++, LIMIT);
-    comments.push(...newComments);
-    setCommentState({
-      comments: comments
-    })
+    if (!newComments.length)
+      document.getElementById('btnLoadComment').hidden = true;
+    commentState.push(...newComments);
+    console.log('commentState', commentState)
+    setCommentState([...commentState]);
   }
 
   const insertComment = async () => {
-    console.log("comment inserted")
+    const inputValue = document.getElementById('inputComment').value;
+    if (!inputValue)
+      return;
+    try {
+      await axios.post('test.steps.me/test/testAssignComment', { body: inputValue });
+    }
+    catch (error) {
+      console.log('error', error.message);
+    }
+    commentState.push({ body: inputValue });
+    setCommentState([...commentState]);
   }
-
+  console.log(commentState);
   return (
     <div className="App">
       <h1>Commenter</h1>
-    <input/>
-    <button onClick={insertComment}>insert comment</button>
-    <br/>
-      {commentState.comments.map(item => {
-        return <Comment comment={item.body} />
-      })}
-    <button onClick={loadComments}>load more comments</button>
+      <input id='inputComment' placeholder='Add a comment...' className='Input' />
+      <button onClick={insertComment}>insert comment</button>
+      <br />
+      {commentState.map(item =>
+        <Comment key={item.id} comment={item} />
+      )}
+      <button id='btnLoadComment' onClick={loadComments}>load more comments</button>
     </div>
   );
 }
