@@ -14,16 +14,15 @@ const App = () => {
 
   const loadComments = async () => {
     const newComments = await getComments(page);
-    if(!newComments.length)
+    if (!newComments.length)
       hasMoreComments = false;
     else
       page++;
     commentState.push(...newComments);
     setCommentState([...commentState]);
   }
-  
+
   const insertComment = async () => {
-    loadComments();
     const inputValue = document.getElementById('inputComment').value;
     if (!inputValue)
       return;
