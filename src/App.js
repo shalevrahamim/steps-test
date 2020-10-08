@@ -3,7 +3,6 @@ import './App.css';
 import Comment from './components/comment/comment';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import { getComments, sendComment } from './utils/commenter';
-import userEvent from '@testing-library/user-event';
 
 const EMAIL = 'shalevr1997@gmail.com';
 const COMMENT_NAME = 'new comment';
@@ -32,7 +31,7 @@ const App = () => {
     document.getElementById('inputComment').value = '';
     if (!inputValue)
       return;
-    const comment = await sendComment({ email: EMAIL, name: COMMENT_NAME, body: inputValue });
+    const comment = await sendComment({ email: EMAIL, name: COMMENT_NAME, body: inputValue, myComment: true });
     commentState.unshift(comment);
     setCommentState([...commentState]);
   }
