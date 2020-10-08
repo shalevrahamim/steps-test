@@ -8,8 +8,8 @@ export const getComments = async (page) => {
 
 export const sendComment = async (comment) => {
     try {
-        const comment = await axios.post('test.steps.me/test/testAssignComment', comment);
-        return comment;
+        const response = await axios.post('http://test.steps.me/test/testAssignComment', comment);
+        return response.data;
     }
     catch (error) {
         console.log('error', error.message);
