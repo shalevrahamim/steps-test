@@ -1,9 +1,21 @@
-.Comment {
-    width: 60%;
-    margin: auto;
+.box {
+    height: 150px;
+    width: 30%;
+    margin: 10px auto;
     border: 1px solid #eee;
     box-shadow: 0 2px 3px #ccc;
     padding: 16px;
     text-align: center;
-    align-items: center;  
+    align-items: center; 
+}
+
+.email {
+    -webkit-text-stroke: 0.5px black;
+    text-align: left;
+    font-size: small;
+}
+
+.name {
+    text-decoration: underline;
+    font-size: large;
 }

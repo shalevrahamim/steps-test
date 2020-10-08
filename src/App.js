@@ -12,8 +12,8 @@ let hasMoreComments = true;
 
 const App = () => {
   const [commentState, setCommentState] = useState([]);
-  
-  useEffect(()=>{
+
+  useEffect(() => {
     loadComments();
   }, []);
 
@@ -29,18 +29,18 @@ const App = () => {
 
   const insertComment = async () => {
     const inputValue = document.getElementById('inputComment').value;
+    document.getElementById('inputComment').value = '';
     if (!inputValue)
       return;
     const comment = await sendComment({ email: EMAIL, name: COMMENT_NAME, body: inputValue });
-    commentState.push(comment);
+    commentState.unshift(comment);
     setCommentState([...commentState]);
   }
 
   return (
-    <div className="App">
-      <h1>Commenter</h1>
-      <input id='inputComment' placeholder='Add a comment...' className='Input' />
-      <button onClick={insertComment}>insert comment</button>
+    <div className="app">
+      <input id='inputComment' placeholder='Add a comment...' className='input' />
+      <button onClick={insertComment} className='button'>insert comment</button>
       <br />
       <InfiniteScroll
         dataLength={commentState.length}
@@ -48,9 +48,7 @@ const App = () => {
         hasMore={hasMoreComments}
         loader={<h4>Loading comments data...</h4>}
       >
-        {commentState.map(item =>
-          <Comment key={item.id} comment={item} />
-        )}
+        {commentState.map(item => <Comment key={item.id} comment={item} />)}
       </InfiniteScroll>
     </div>
   );

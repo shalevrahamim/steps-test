@@ -4,10 +4,10 @@ import './comment.css'
 const comment = (props) => {
     const comment = props.comment;
     return (
-        <div className='Comment'>
-            <p>email: {comment.email}</p>
-            <p>name: {comment.name}</p>
-            <p>comment: {comment.body}</p>
+        <div className='box'>
+            <p className='email'>{comment.email}</p>
+            <p className='name'>{comment.name}</p>
+            <p>{comment.body}</p>
         </div>
     )
 }
