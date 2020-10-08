@@ -31,7 +31,7 @@ const App = () => {
     document.getElementById('inputComment').value = '';
     if (!inputValue)
       return;
-    const comment = await sendComment({ email: EMAIL, name: COMMENT_NAME, body: inputValue, myComment: true });
+    const comment = await sendComment({ email: EMAIL, name: COMMENT_NAME, body: inputValue, isMy: true });
     commentState.unshift(comment);
     setCommentState([...commentState]);
   }
